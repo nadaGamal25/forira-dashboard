@@ -7,6 +7,7 @@ export default function Clients() {
   useEffect(()=>{
     getData()
     getPosition()
+    getVillage()
   },[])
   const [categories,setCategories]=useState([])
   async function getCategories() {
@@ -25,6 +26,17 @@ export default function Clients() {
       const response = await axios.get('https://delivery-app-pi-sable.vercel.app/api/position');
       console.log(response)
       setPosition(response.data.data.positions)
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const [villages,setVillages]=useState([])
+  async function getVillage() {
+    try {
+      const response = await axios.get('https://delivery-app-pi-sable.vercel.app/api/village');
+      console.log(response)
+      setVillages(response.data.data.village)
       
     } catch (error) {
       console.error(error);
@@ -153,6 +165,110 @@ export default function Clients() {
       const closeModalMain = () => {
         setShowModalMain(false);
       };
+
+       //edit data 
+  const [isModalOpenData, setIsModalOpenData] = useState(false);
+  const [editedData, setEditedData] = useState(null);
+  const [eData, seteData] = useState(null);
+    const handleEditClickData = (data) => {
+    seteData(data);
+    setEditedData({
+      name: data?.name || '',
+      phone: data?.phone || '',
+      email: data?.email || '',
+      password: data?.password || '',
+      position: data?.position?._id || '',
+      village: data?.village?._id || '',
+      address: data?.address || '',
+      urlLocation: data?.urlLocation || '',
+      startTime: data?.startTime || '',
+      endTime: data?.endTime || '',
+      // categoryId: data?.categoryId._id || '',
+      dateOfBirth: data?.dateOfBirth || '',
+      positionLocation: data?.positionLocation || '',
+      description: data?.description || '',
+      vehicleNumber: data?.vehicleNumber || '',
+      vehicleColor: data?.vehicleColor || '',
+      vehicleType: data?.vehicleType || '',
+      vehiclesImgs: data?.vehiclesImgs || [],
+      profileImg: data?.profileImg || [],
+    });
+    setIsModalOpenData(true);
+  };
+  
+  const closeModalData = () => {
+    setIsModalOpenData(false);
+    setEditedData(null);
+  };
+  
+  const handleInputChangeData = (event) => {
+    const { name, value } = event.target;
+    setEditedData((prev) => ({ ...prev, [name]: value }));
+  };
+  
+  const handleFileChangeEdit = (event) => {
+    const files = Array.from(event.target.files);
+    setEditedData((prev) => ({
+      ...prev,
+      profileImg: [...prev.profileImg, ...files],
+    }));
+  };
+  const handleFileVehiclesEdit = (event) => {
+    const files = Array.from(event.target.files);
+    setEditedData((prev) => ({
+      ...prev,
+      vehiclesImgs: [...prev.vehiclesImgs, ...files],
+    }));
+  };
+  
+  const handleEditSubmitData = async (event) => {
+    console.log("Edited Data to Submit:", editedData);
+  
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('name', editedData.name);
+    formData.append('description', editedData.description);
+    formData.append('phone', editedData.phone);
+    formData.append('email', editedData.email);
+    formData.append('password', editedData.password);
+    formData.append('position', editedData.position);
+    formData.append('village', editedData.village);
+    formData.append('address', editedData.address);
+    formData.append('urlLocation', editedData.urlLocation);
+    formData.append('startTime', editedData.startTime);
+    formData.append('endTime', editedData.endTime);
+    // formData.append('categoryId', editedData.categoryId);
+    formData.append('dateOfBirth', editedData.dateOfBirth);
+    formData.append('positionLocation', editedData.positionLocation);
+    formData.append('vehicleNumber', editedData.vehicleNumber);
+    formData.append('vehicleColor', editedData.vehicleColor);
+    formData.append('vehicleType', editedData.vehicleType);
+    if (Array.isArray(editedData.profileImg)) {
+      // If profileImg is an array, loop through and append files to formData
+      editedData.profileImg.forEach((file) => formData.append('profileImg', file));
+  } else if (editedData.profileImg) {
+      // If profileImg is a single file, append it directly
+      formData.append('profileImg', editedData.profileImg);
+  }
+    editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
+  
+    try {
+      const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/admin/update-user/${eData._id}`, formData,
+        {
+          headers: {
+            token: localStorage.getItem('userToken'),
+          },
+        }
+      );
+      alert("تم التعديل بنجاح");
+      console.log(response)
+      closeModalData();
+      getData();
+    } catch (error) {
+      console.error(error);
+      alert(error.response.data.message);
+    }
+  };
   return (
     <>
  <div className='p-4 admin' id='content'>
@@ -218,6 +334,7 @@ export default function Clients() {
 <th scope="col">الوصف  </th>
 
 <th></th>           
+<th></th>           
 
 </tr>
 </thead>
@@ -242,6 +359,9 @@ export default function Clients() {
           
      <td>
       <button className='btn btn-green' onClick={()=>{openModalMain(item._id)}}>اجراءات</button>
+     </td>
+     <td>
+     <button className='btn btn-secondary m-1' onClick={()=>{handleEditClickData(item)}}>تعديل</button>
      </td>
         </tr>
       ) : null
@@ -276,7 +396,241 @@ export default function Clients() {
           {/* Additional buttons or actions can be added here */}
         </Modal.Footer>
       </Modal>
-
+ {isModalOpenData && (
+        <Modal show={isModalOpenData} onHide={closeModalData}>
+          <Modal.Header>
+            <Modal.Title>تعديل البيانات</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={handleEditSubmitData}>
+              <div className="row">
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="name">الاسم :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.name}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="name"
+                  />
+                </div>
+                
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="phone">الهاتف :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.phone}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="phone"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="email">الايميل :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.email}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="email"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="password">كلمة المرور :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.password}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="password"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="address">العنوان :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.address}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="address"
+                  />
+                </div>
+                {/* <div className="col-md-6 pb-1">
+                  <label htmlFor="categoryId">الفئة :</label>
+                  <select
+                    className="form-control my-2"
+                    name="categoryId"
+                    value={editedData.categoryId.name}
+                    onChange={handleInputChangeData}
+                    
+                  >
+                    <option value="">اختر الفئة</option>
+                    {categories &&
+                      categories.map((item, index) => (
+                        <option key={index} value={item._id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
+                </div> */}
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="position">المنطقة :</label>
+                  <select
+                    className="form-control my-2"
+                    name="position"
+                    value={editedData.position.name}
+                    onChange={handleInputChangeData}
+                    
+                  >
+                    <option value="">اختر المنطقة</option>
+                    {positions &&
+                      positions.map((item, index) => (
+                        <option key={index} value={item._id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="village">القرية :</label>
+                  <select
+                    className="form-control my-2"
+                    name="village"
+                    value={editedData.village.name}
+                    onChange={handleInputChangeData}
+                    
+                  >
+                    <option value="">اختر القرية</option>
+                    {villages &&
+                      villages.map((item, index) => (
+                        <option key={index} value={item._id}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="startTime">وقت البدء :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.startTime}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="startTime"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="endTime">وقت الانتهاء :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.endTime}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="endTime"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="dateOfBirth">تاريخ الميلاد :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.dateOfBirth}
+                    type="date"
+                    className="my-input my-2 form-control"
+                    name="dateOfBirth"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="urlLocation">لينك الموقع :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.urlLocation}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="urlLocation"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="positionLocation">الموقع (داخل,خارج):</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.positionLocation}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="positionLocation"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">رقم العربية :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.vehicleNumber}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="vehicleNumber"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="vehicleColor">اللون :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.vehicleColor}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="vehicleColor"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="vehicleType">النوع :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.vehicleType}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="vehicleType"
+                  />
+                </div>
+                
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="description">الوصف :</label>
+                  <input
+                    onChange={handleInputChangeData}
+                    value={editedData.description}
+                    type="text"
+                    className="my-input my-2 form-control"
+                    name="description"
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">صور طريقة التوصيل :</label>
+                  <input
+                    type="file"
+                    className="form-control my-2"
+                    multiple
+                    onChange={handleFileVehiclesEdit}
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">الصورة الشخصية :</label>
+                  <input
+                    type="file"
+                    className="form-control my-2"
+                    multiple
+                    onChange={handleFileChangeEdit}
+                  />
+                </div>
+                <div className="text-center pt-1">
+                  <button className="btn btn-primary">تعديل</button>
+                </div>
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeModalData}>
+              إغلاق
+            </Button>
+          </Modal.Footer>
+        </Modal>
+   )}
      
 </>
   )

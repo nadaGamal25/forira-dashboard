@@ -60,7 +60,7 @@ export default function FavDrivers() {
       const [searchCategory, setSearchCategory] = useState('');
       const [searchRate, setSearchRate] = useState('');
       const [searchAge, setSearchAge] = useState('');
-      const [searchTime, setSearchTime] = useState('');
+      const [searchOnline, setSearchOnline] = useState('');
       const [loading, setLoading] = useState(false);
 
       async function getSearchData() {
@@ -71,7 +71,7 @@ export default function FavDrivers() {
                 position: searchPosition,
                 category: searchCategory,
                 rateAvg: searchRate,
-                time:searchTime,
+                online:searchOnline,
                 age:searchAge,
                 
               },
@@ -131,8 +131,8 @@ export default function FavDrivers() {
         <div className="col-md-4">
           <input className='form-control m-1' type="search" 
           
-          placeholder="الوقت"
-          onChange={(e) => setSearchTime(e.target.value)} />
+          placeholder="متاح"
+          onChange={(e) => setSearchOnline(e.target.value)} />
         </div>
         
         <div className="text-center mt-1">

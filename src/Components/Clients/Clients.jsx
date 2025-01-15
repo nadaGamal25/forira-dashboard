@@ -181,16 +181,16 @@ export default function Clients() {
       village: data?.village?._id || '',
       address: data?.address || '',
       urlLocation: data?.urlLocation || '',
-      startTime: data?.startTime || '',
-      endTime: data?.endTime || '',
+      // startTime: data?.startTime || '',
+      // endTime: data?.endTime || '',
       // categoryId: data?.categoryId._id || '',
       dateOfBirth: data?.dateOfBirth || '',
-      positionLocation: data?.positionLocation || '',
+      // positionLocation: data?.positionLocation || '',
       description: data?.description || '',
-      vehicleNumber: data?.vehicleNumber || '',
-      vehicleColor: data?.vehicleColor || '',
-      vehicleType: data?.vehicleType || '',
-      vehiclesImgs: data?.vehiclesImgs || [],
+      // vehicleNumber: data?.vehicleNumber || '',
+      // vehicleColor: data?.vehicleColor || '',
+      // vehicleType: data?.vehicleType || '',
+      // vehiclesImgs: data?.vehiclesImgs || [],
       profileImg: data?.profileImg || [],
     });
     setIsModalOpenData(true);
@@ -235,14 +235,14 @@ export default function Clients() {
     formData.append('village', editedData.village);
     formData.append('address', editedData.address);
     formData.append('urlLocation', editedData.urlLocation);
-    formData.append('startTime', editedData.startTime);
-    formData.append('endTime', editedData.endTime);
+    // formData.append('startTime', editedData.startTime);
+    // formData.append('endTime', editedData.endTime);
     // formData.append('categoryId', editedData.categoryId);
     formData.append('dateOfBirth', editedData.dateOfBirth);
-    formData.append('positionLocation', editedData.positionLocation);
-    formData.append('vehicleNumber', editedData.vehicleNumber);
-    formData.append('vehicleColor', editedData.vehicleColor);
-    formData.append('vehicleType', editedData.vehicleType);
+    // formData.append('positionLocation', editedData.positionLocation);
+    // formData.append('vehicleNumber', editedData.vehicleNumber);
+    // formData.append('vehicleColor', editedData.vehicleColor);
+    // formData.append('vehicleType', editedData.vehicleType);
     if (Array.isArray(editedData.profileImg)) {
       // If profileImg is an array, loop through and append files to formData
       editedData.profileImg.forEach((file) => formData.append('profileImg', file));
@@ -250,7 +250,7 @@ export default function Clients() {
       // If profileImg is a single file, append it directly
       formData.append('profileImg', editedData.profileImg);
   }
-    editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
+    // editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
   
     try {
       const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/admin/update-user/${eData._id}`, formData,
@@ -509,26 +509,7 @@ export default function Clients() {
                       ))}
                   </select>
                 </div>
-                <div className="col-md-6 pb-1">
-                  <label htmlFor="startTime">وقت البدء :</label>
-                  <input
-                    onChange={handleInputChangeData}
-                    value={editedData.startTime}
-                    type="text"
-                    className="my-input my-2 form-control"
-                    name="startTime"
-                  />
-                </div>
-                <div className="col-md-6 pb-1">
-                  <label htmlFor="endTime">وقت الانتهاء :</label>
-                  <input
-                    onChange={handleInputChangeData}
-                    value={editedData.endTime}
-                    type="text"
-                    className="my-input my-2 form-control"
-                    name="endTime"
-                  />
-                </div>
+               
                 <div className="col-md-6 pb-1">
                   <label htmlFor="dateOfBirth">تاريخ الميلاد :</label>
                   <input
@@ -549,7 +530,7 @@ export default function Clients() {
                     name="urlLocation"
                   />
                 </div>
-                <div className="col-md-6 pb-1">
+                {/* <div className="col-md-6 pb-1">
                   <label htmlFor="positionLocation">الموقع (داخل,خارج):</label>
                   <input
                     onChange={handleInputChangeData}
@@ -558,8 +539,8 @@ export default function Clients() {
                     className="my-input my-2 form-control"
                     name="positionLocation"
                   />
-                </div>
-                <div className="col-md-6 pb-1">
+                </div> */}
+                {/* <div className="col-md-6 pb-1">
                   <label htmlFor="">رقم العربية :</label>
                   <input
                     onChange={handleInputChangeData}
@@ -588,7 +569,7 @@ export default function Clients() {
                     className="my-input my-2 form-control"
                     name="vehicleType"
                   />
-                </div>
+                </div> */}
                 
                 <div className="col-md-6 pb-1">
                   <label htmlFor="description">الوصف :</label>
@@ -600,7 +581,7 @@ export default function Clients() {
                     name="description"
                   />
                 </div>
-                <div className="col-md-6 pb-1">
+                {/* <div className="col-md-6 pb-1">
                   <label htmlFor="">صور طريقة التوصيل :</label>
                   <input
                     type="file"
@@ -608,7 +589,7 @@ export default function Clients() {
                     multiple
                     onChange={handleFileVehiclesEdit}
                   />
-                </div>
+                </div> */}
                 <div className="col-md-6 pb-1">
                   <label htmlFor="">الصورة الشخصية :</label>
                   <input

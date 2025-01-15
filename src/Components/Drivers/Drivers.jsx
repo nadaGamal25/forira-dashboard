@@ -72,6 +72,7 @@ export default function Drivers() {
       const [searchCategory, setSearchCategory] = useState('');
       const [searchRate, setSearchRate] = useState('');
       const [searchAge, setSearchAge] = useState('');
+      const [searchOnline, setSearchOnline] = useState('');
       const [searchTime, setSearchTime] = useState('');
       const [loading, setLoading] = useState(false);
 
@@ -83,7 +84,7 @@ export default function Drivers() {
                 position: searchPosition,
                 category: searchCategory,
                 rateAvg: searchRate,
-                time:searchTime,
+                online:searchOnline,
                 age:searchAge,
                 
               },
@@ -238,8 +239,9 @@ const [eData, seteData] = useState(null);
     village: data?.village._id || '',
     address: data?.address || '',
     urlLocation: data?.urlLocation || '',
-    startTime: data?.startTime || '',
-    endTime: data?.endTime || '',
+    // startTime: data?.startTime || '',
+    // endTime: data?.endTime || '',
+    online:data?.online || '',
     categoryId: data?.categoryId._id || '',
     dateOfBirth: data?.dateOfBirth || '',
     positionLocation: data?.positionLocation || '',
@@ -249,6 +251,8 @@ const [eData, seteData] = useState(null);
     vehicleType: data?.vehicleType || '',
     vehiclesImgs: data?.vehiclesImgs || [],
     profileImg: data?.profileImg || [],
+    idCardImg: data?.idCardImg || [],
+    licenseImg: data?.licenseImg || [],
   });
   setIsModalOpenData(true);
 };
@@ -268,6 +272,20 @@ const handleFileChangeEdit = (event) => {
   setEditedData((prev) => ({
     ...prev,
     profileImg: [...prev.profileImg, ...files],
+  }));
+};
+const handleFileIdCardEdit = (event) => {
+  const files = Array.from(event.target.files);
+  setEditedData((prev) => ({
+    ...prev,
+    idCardImg: [...prev.idCardImg, ...files],
+  }));
+};
+const handleFileLicenseImgEdit = (event) => {
+  const files = Array.from(event.target.files);
+  setEditedData((prev) => ({
+    ...prev,
+    licenseImg: [...prev.licenseImg, ...files],
   }));
 };
 const handleFileVehiclesEdit = (event) => {
@@ -292,8 +310,9 @@ const handleEditSubmitData = async (event) => {
   formData.append('village', editedData.village);
   formData.append('address', editedData.address);
   formData.append('urlLocation', editedData.urlLocation);
-  formData.append('startTime', editedData.startTime);
-  formData.append('endTime', editedData.endTime);
+  formData.append('online', editedData.online);
+  // formData.append('startTime', editedData.startTime);
+  // formData.append('endTime', editedData.endTime);
   formData.append('categoryId', editedData.categoryId);
   formData.append('dateOfBirth', editedData.dateOfBirth);
   formData.append('positionLocation', editedData.positionLocation);
@@ -306,6 +325,16 @@ const handleEditSubmitData = async (event) => {
 } else if (editedData.profileImg) {
     // If profileImg is a single file, append it directly
     formData.append('profileImg', editedData.profileImg);
+}
+if (Array.isArray(editedData.idCardImg)) {
+  editedData.idCardImg.forEach((file) => formData.append('idCardImg', file));
+} else if (editedData.idCardImg) {
+  formData.append('idCardImg', editedData.idCardImg);
+}
+if (Array.isArray(editedData.licenseImg)) {
+  editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
+} else if (editedData.licenseImg) {
+  formData.append('licenseImg', editedData.licenseImg);
 }
   editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
 
@@ -365,11 +394,11 @@ const handleEditSubmitData = async (event) => {
           placeholder="التقييم"
           onChange={(e) => setSearchRate(e.target.value)} />
         </div>
-        <div className="col-md-4">
+       <div className="col-md-4">
           <input className='form-control m-1' type="search" 
           
-          placeholder="الوقت"
-          onChange={(e) => setSearchTime(e.target.value)} />
+          placeholder="متاح"
+          onChange={(e) => setSearchOnline(e.target.value)} />
         </div>
         
         <div className="text-center mt-1">
@@ -408,6 +437,8 @@ const handleEditSubmitData = async (event) => {
 <th scope="col">اللون  </th>
 <th scope="col">النوع  </th>
 <th scope="col">الرقم  </th>
+<th scope="col">البطاقة  </th>
+<th scope="col">الرخصة  </th>
 <th></th>           
 <th></th>           
 
@@ -441,6 +472,8 @@ const handleEditSubmitData = async (event) => {
           <td>{item.vehicleColor || "_"}</td>
           <td>{item.vehicleType || "_"}</td>
           <td>{item.vehicleNumber || "_"}</td>
+          {item.idCardImg?<td><a href={item.idCardImg} target='_blank'>الصورة</a></td>:<td>_</td>}
+          {item.licenseImg?<td><a href={item.licenseImg} target='_blank'>الصورة</a></td>:<td>_</td>}
           
      <td>
       <button className='btn btn-green' onClick={()=>{openModalMain(item._id)}}>اجراءات</button>
@@ -746,7 +779,7 @@ const handleEditSubmitData = async (event) => {
                       ))}
                   </select>
                 </div>
-                <div className="col-md-6 pb-1">
+                {/* <div className="col-md-6 pb-1">
                   <label htmlFor="startTime">وقت البدء :</label>
                   <input
                     onChange={handleInputChangeData}
@@ -765,7 +798,7 @@ const handleEditSubmitData = async (event) => {
                     className="my-input my-2 form-control"
                     name="endTime"
                   />
-                </div>
+                </div> */}
                 <div className="col-md-6 pb-1">
                   <label htmlFor="dateOfBirth">تاريخ الميلاد :</label>
                   <input
@@ -853,6 +886,24 @@ const handleEditSubmitData = async (event) => {
                     className="form-control my-2"
                     multiple
                     onChange={handleFileChangeEdit}
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">صورة البطاقة :</label>
+                  <input
+                    type="file"
+                    className="form-control my-2"
+                    multiple
+                    onChange={handleFileIdCardEdit}
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">صورة الرخصة :</label>
+                  <input
+                    type="file"
+                    className="form-control my-2"
+                    multiple
+                    onChange={handleFileLicenseImgEdit}
                   />
                 </div>
                 <div className="text-center pt-1">

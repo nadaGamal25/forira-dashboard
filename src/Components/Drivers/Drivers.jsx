@@ -429,8 +429,8 @@ if (Array.isArray(editedData.licenseImg)) {
 <th scope="col">التوصيل  </th>
 <th scope="col">الفئة  </th>
 <th scope="col">عدد التواصل  </th>
-<th scope="col">التوثيق  </th>
-<th scope="col">الاشتراك  </th>
+{/* <th scope="col">التوثيق  </th>
+<th scope="col">الاشتراك  </th> */}
 <th scope="col">التقييم  </th>
 <th scope="col">الوصف  </th>
 <th scope="col">الصور  </th>
@@ -439,6 +439,10 @@ if (Array.isArray(editedData.licenseImg)) {
 <th scope="col">الرقم  </th>
 <th scope="col">البطاقة  </th>
 <th scope="col">الرخصة  </th>
+<th scope="col">isConfirmed  </th>
+<th scope="col">isValid(الاشتراك)  </th>
+<th scope="col">حظر  </th>
+<th></th>           
 <th></th>           
 <th></th>           
 
@@ -461,8 +465,7 @@ if (Array.isArray(editedData.licenseImg)) {
           <td>{item.positionLocation || "_"}</td>
           <td>{item.categoryId?.name || "_"}</td>
           <td>{item.numberOfConnect || "_"}</td>
-          <td>{item.isConfirmed===true?"true":"false" || "_"}</td>
-          <td>{item.isValid===true?"true":"false" || "_"}</td>
+          
           <td>{item.rateAvg || "_"}</td>
           <td>{item.description || "_"}</td>
           <td>
@@ -474,12 +477,48 @@ if (Array.isArray(editedData.licenseImg)) {
           <td>{item.vehicleNumber || "_"}</td>
           {item.idCardImg?<td><a href={item.idCardImg} target='_blank'>الصورة</a></td>:<td>_</td>}
           {item.licenseImg?<td><a href={item.licenseImg} target='_blank'>الصورة</a></td>:<td>_</td>}
-          
+          <td>{item.isConfirmed===true?"true":"false" || "_"}</td>
+          <td>{item.isValid===true?"true":"false" || "_"}</td>
+          <td>{item.isBlocked===true?"true":"false"  || "_"}</td>
      <td>
       <button className='btn btn-green' onClick={()=>{openModalMain(item._id)}}>اجراءات</button>
      </td>
      <td>
-     <button className='btn btn-secondary m-1' onClick={()=>{handleEditClickData(item)}}>تعديل</button>
+     <button className='btn btn-secondary' onClick={()=>{handleEditClickData(item)}}>تعديل</button>
+     </td>
+     <td>
+     <button
+  className="btn btn-danger"
+  onClick={() => {
+    if (window.confirm('هل انت بالتأكيد تريد حذف هذا  ؟')) {
+      console.log(localStorage.getItem('userToken'));
+      axios
+        .delete(
+          `https://delivery-app-pi-sable.vercel.app/api/admin/delete-user/${item._id}`,
+          {
+            headers: {
+              token: localStorage.getItem('userToken'), // Move headers here
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+            getData();
+            window.alert('تم الحذف بنجاح');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.response) {
+            window.alert(error.response.data.data.error || 'حدث خطأ ما');
+          }
+        });
+    }
+  }}
+>
+  حذف
+</button>
      </td>
      
         </tr>

@@ -329,13 +329,14 @@ export default function Clients() {
 <th scope="col">العنوان  </th>
 <th scope="col">القرية  </th>
 <th scope="col">الموقع  </th>
-<th scope="col">التوثيق  </th>
+{/* <th scope="col">التوثيق  </th> */}
 <th scope="col">الاشتراك  </th>
+<th scope="col">حظر  </th>
 <th scope="col">الوصف  </th>
 
 <th></th>           
 <th></th>           
-
+<th></th>
 </tr>
 </thead>
 <tbody>
@@ -352,8 +353,10 @@ export default function Clients() {
           <td>{item.address || "_"}</td>
           {item.village !== null?<td> {item.village?.name}</td>:<td>_</td>}
           <td>{item.urlLocation || "_"}</td>
-          <td>{item.isConfirmed===true?"true":"false" || "_"}</td>
-          <td>{item.isValid===true?"true":"false" || "_"}</td>
+          {/* <td>{item.isConfirmed===true?"true":"false" || "_"}</td> */}
+          <td>{item.isValid===true?"true":"false" || "_"}</td>\
+          <td>{item.isBlocked===true?"true":"false"  || "_"}</td>
+
           <td>{item.description || "_"}</td>
          
           
@@ -362,6 +365,40 @@ export default function Clients() {
      </td>
      <td>
      <button className='btn btn-secondary m-1' onClick={()=>{handleEditClickData(item)}}>تعديل</button>
+     </td>
+     <td>
+     <button
+  className="btn btn-danger"
+  onClick={() => {
+    if (window.confirm('هل انت بالتأكيد تريد حذف هذا  ؟')) {
+      console.log(localStorage.getItem('userToken'));
+      axios
+        .delete(
+          `https://delivery-app-pi-sable.vercel.app/api/admin/delete-user/${item._id}`,
+          {
+            headers: {
+              token: localStorage.getItem('userToken'), // Move headers here
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+            getData();
+            window.alert('تم الحذف بنجاح');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.response) {
+            window.alert(error.response.data.data.error || 'حدث خطأ ما');
+          }
+        });
+    }
+  }}
+>
+  حذف
+</button>
      </td>
         </tr>
       ) : null

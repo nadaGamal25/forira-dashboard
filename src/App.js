@@ -19,6 +19,7 @@ import SocialMidea from './Components/SocialMidea/SocialMidea';
 import Suggests from './Components/Suggests/Suggests';
 import UsersWallet from './Components/UsersWallet/UsersWallet';
 import Villages from './Components/Villages/Villages';
+import AddUser from './Components/AddUser/AddUser';
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
         {path:'fav',element:<FavDrivers/>},
         {path:'media',element:<SocialMidea/>},
         {path:'about',element:<Aboutus/>},
+        {path:'addUser',element:<AddUser/>},
        
       ]},
      

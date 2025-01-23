@@ -113,7 +113,8 @@ export default function Clients() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message)
+          getData()          
         } catch (error) {
           console.error(error);
         }
@@ -131,7 +132,8 @@ export default function Clients() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message)        
+          getData()  
         } catch (error) {
           console.error(error);
         }
@@ -149,7 +151,27 @@ export default function Clients() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message)   
+          getData()       
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      async function highlightUser(id,value) {
+        try {
+          const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/admin/highlight-user/${id}`,
+            {
+              value
+            },
+            {
+              headers: {
+                token: localStorage.getItem('userToken'),
+              },
+            }
+          );
+          console.log(response)
+          alert(response.data.message)   
+          getData()       
         } catch (error) {
           console.error(error);
         }
@@ -332,6 +354,7 @@ export default function Clients() {
 {/* <th scope="col">التوثيق  </th> */}
 <th scope="col">الاشتراك  </th>
 <th scope="col">حظر  </th>
+<th scope="col">التمييز  </th>
 <th scope="col">الوصف  </th>
 
 <th></th>           
@@ -354,8 +377,9 @@ export default function Clients() {
           {item.village !== null?<td> {item.village?.name}</td>:<td>_</td>}
           <td>{item.urlLocation || "_"}</td>
           {/* <td>{item.isConfirmed===true?"true":"false" || "_"}</td> */}
-          <td>{item.isValid===true?"true":"false" || "_"}</td>\
+          <td>{item.isValid===true?"true":"false" || "_"}</td>
           <td>{item.isBlocked===true?"true":"false"  || "_"}</td>
+          <td>{item.isHighlighted===true?"true":"false"  || "_"}</td>
 
           <td>{item.description || "_"}</td>
          
@@ -420,9 +444,12 @@ export default function Clients() {
           <Button className='btn btn-success m-1' onClick={()=>{confirmUser(selectedId,true)}}>توثيق الحساب</Button>
           <Button className='btn btn-success m-1' onClick={()=>{validUser(selectedId,true)}}>تفعيل الحساب</Button>
           <Button className='btn btn-success m-1' onClick={()=>{blockUser(selectedId,false)}}>الغاء الحظر</Button>
+          <Button className='btn btn-success m-1' onClick={()=>{highlightUser(selectedId,true)}}>تمييز الحساب</Button>
           <Button className='btn btn-danger m-1' onClick={()=>{confirmUser(selectedId,false)}}>الغاء التوثيق</Button>
           <Button className='btn btn-danger m-1' onClick={()=>{validUser(selectedId,false)}}>تعطيل الحساب </Button>
           <Button className='btn btn-danger m-1' onClick={()=>{blockUser(selectedId,true)}}>حظر المستخدم</Button>
+          <Button className='btn btn-danger m-1' onClick={()=>{highlightUser(selectedId,false)}}>الغاء التمييز</Button>
+          
           </div>
 
         </Modal.Body>

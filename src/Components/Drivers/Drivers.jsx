@@ -127,7 +127,8 @@ export default function Drivers() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message)   
+          getData()       
         } catch (error) {
           console.error(error);
         }
@@ -145,7 +146,8 @@ export default function Drivers() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message) 
+          getData()         
         } catch (error) {
           console.error(error);
         }
@@ -163,7 +165,27 @@ export default function Drivers() {
             }
           );
           console.log(response)
-          alert(response.data.message)          
+          alert(response.data.message)   
+          getData()       
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      async function highlightUser(id,value) {
+        try {
+          const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/admin/highlight-user/${id}`,
+            {
+              value
+            },
+            {
+              headers: {
+                token: localStorage.getItem('userToken'),
+              },
+            }
+          );
+          console.log(response)
+          alert(response.data.message)   
+          getData()       
         } catch (error) {
           console.error(error);
         }
@@ -442,6 +464,7 @@ if (Array.isArray(editedData.licenseImg)) {
 <th scope="col">isConfirmed  </th>
 <th scope="col">isValid(الاشتراك)  </th>
 <th scope="col">حظر  </th>
+<th scope="col">التمييز  </th>
 <th></th>           
 <th></th>           
 <th></th>           
@@ -480,6 +503,7 @@ if (Array.isArray(editedData.licenseImg)) {
           <td>{item.isConfirmed===true?"true":"false" || "_"}</td>
           <td>{item.isValid===true?"true":"false" || "_"}</td>
           <td>{item.isBlocked===true?"true":"false"  || "_"}</td>
+          <td>{item.isHighlighted===true?"true":"false"  || "_"}</td>
      <td>
       <button className='btn btn-green' onClick={()=>{openModalMain(item._id)}}>اجراءات</button>
      </td>
@@ -569,9 +593,11 @@ if (Array.isArray(editedData.licenseImg)) {
           <Button className='btn btn-success m-1' onClick={()=>{confirmUser(selectedId,true)}}>توثيق الحساب</Button>
           <Button className='btn btn-success m-1' onClick={()=>{validUser(selectedId,true)}}>تفعيل الحساب</Button>
           <Button className='btn btn-success m-1' onClick={()=>{blockUser(selectedId,false)}}>الغاء الحظر</Button>
+          <Button className='btn btn-success m-1' onClick={()=>{highlightUser(selectedId,true)}}>تمييز الحساب</Button>
           <Button className='btn btn-danger m-1' onClick={()=>{confirmUser(selectedId,false)}}>الغاء التوثيق</Button>
           <Button className='btn btn-danger m-1' onClick={()=>{validUser(selectedId,false)}}>تعطيل الحساب </Button>
           <Button className='btn btn-danger m-1' onClick={()=>{blockUser(selectedId,true)}}>حظر المستخدم</Button>
+          <Button className='btn btn-danger m-1' onClick={()=>{highlightUser(selectedId,false)}}>الغاء التمييز</Button>
           <Button className='btn btn-primary m-1' onClick={()=>{openModalOffer(selectedId)}}>العروض</Button>
           <Button className='btn btn-warning m-1' onClick={()=>{openModalReviews(selectedId)}}>التقييمات</Button>
           </div>

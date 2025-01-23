@@ -93,10 +93,18 @@ export default function Navbar({userData ,logout}) {
                 </span>
                 </Link>
             </li>
+            
             <li>
                 <Link to="/fav">
                 <i class="fa-solid fa-heart bx"></i>
                   <span class="text">السائقين المفضلين
+                </span>
+                </Link>
+            </li>
+            <li>
+                <Link to="/addUser">
+                <i class="fa-solid fa-user bx"></i>
+                  <span class="text">اضافة مستخدم
                 </span>
                 </Link>
             </li>

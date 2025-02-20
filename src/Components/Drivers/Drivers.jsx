@@ -272,12 +272,13 @@ const [eData, seteData] = useState(null);
     vehicleColor: data?.vehicleColor || '',
     vehicleType: data?.vehicleType || '',
     vehiclesImgs: data?.vehiclesImgs || [],
+    licenseVehicleImgs: data?.licenseVehicleImgs || [],
     profileImg: data?.profileImg || [],
     idCardImg: data?.idCardImg || [],
     licenseImg: data?.licenseImg || [],
   });
   setIsModalOpenData(true);
-};
+}; 
 
 const closeModalData = () => {
   setIsModalOpenData(false);
@@ -318,6 +319,14 @@ const handleFileVehiclesEdit = (event) => {
   }));
 };
 
+const handleLicenseVehicleImgsEdit = (event) => {
+  const files = Array.from(event.target.files);
+  setEditedData((prev) => ({
+    ...prev,
+    licenseVehicleImgs: [...prev.licenseVehicleImgs, ...files],
+  }));
+};
+
 const handleEditSubmitData = async (event) => {
   console.log("Edited Data to Submit:", editedData);
 
@@ -348,17 +357,20 @@ const handleEditSubmitData = async (event) => {
     // If profileImg is a single file, append it directly
     formData.append('profileImg', editedData.profileImg);
 }
-if (Array.isArray(editedData.idCardImg)) {
-  editedData.idCardImg.forEach((file) => formData.append('idCardImg', file));
-} else if (editedData.idCardImg) {
-  formData.append('idCardImg', editedData.idCardImg);
-}
-if (Array.isArray(editedData.licenseImg)) {
-  editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
-} else if (editedData.licenseImg) {
-  formData.append('licenseImg', editedData.licenseImg);
-}
-  editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
+// if (Array.isArray(editedData.idCardImg)) {
+//   editedData.idCardImg.forEach((file) => formData.append('idCardImg', file));
+// } else if (editedData.idCardImg) {
+//   formData.append('idCardImg', editedData.idCardImg);
+// }
+// if (Array.isArray(editedData.licenseImg)) {
+//   editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
+// } else if (editedData.licenseImg) {
+//   formData.append('licenseImg', editedData.licenseImg);
+// }
+editedData.vehiclesImgs.forEach((file) => formData.append('vehiclesImgs', file));
+editedData.licenseVehicleImgs.forEach((file) => formData.append('licenseVehicleImgs', file));
+editedData.idCardImg.forEach((file) => formData.append('idCardImg', file));
+editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
 
   try {
     const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/admin/update-user/${eData._id}`, formData,
@@ -461,6 +473,7 @@ if (Array.isArray(editedData.licenseImg)) {
 <th scope="col">الرقم  </th>
 <th scope="col">البطاقة  </th>
 <th scope="col">الرخصة  </th>
+<th scope="col">رخص العربية  </th>
 <th scope="col">isConfirmed  </th>
 <th scope="col">isValid(الاشتراك)  </th>
 <th scope="col">حظر  </th>
@@ -491,15 +504,16 @@ if (Array.isArray(editedData.licenseImg)) {
           
           <td>{item.rateAvg || "_"}</td>
           <td>{item.description || "_"}</td>
-          <td>
+          {item.vehiclesImgs?<td>
           <a className="text-primary" onClick={() => openCarousel(item.vehiclesImgs)}>الصور</a>
 
-          </td>
+          </td>:<td>_</td>}
           <td>{item.vehicleColor || "_"}</td>
           <td>{item.vehicleType || "_"}</td>
           <td>{item.vehicleNumber || "_"}</td>
-          {item.idCardImg?<td><a href={item.idCardImg} target='_blank'>الصورة</a></td>:<td>_</td>}
-          {item.licenseImg?<td><a href={item.licenseImg} target='_blank'>الصورة</a></td>:<td>_</td>}
+          {item.idCardImg?<td><a className="text-primary" onClick={() => openCarousel(item.idCardImg)}>الصور</a></td>:<td>_</td>}
+          {item.licenseImg?<td><a className="text-primary" onClick={() => openCarousel(item.licenseImg)}>الصور</a></td>:<td>_</td>}
+          {item.licenseVehicleImgs?<td><a className="text-primary" onClick={() => openCarousel(item.licenseVehicleImgs)}>الصور</a></td>:<td>_</td>}
           <td>{item.isConfirmed===true?"true":"false" || "_"}</td>
           <td>{item.isValid===true?"true":"false" || "_"}</td>
           <td>{item.isBlocked===true?"true":"false"  || "_"}</td>
@@ -969,6 +983,15 @@ if (Array.isArray(editedData.licenseImg)) {
                     className="form-control my-2"
                     multiple
                     onChange={handleFileLicenseImgEdit}
+                  />
+                </div>
+                <div className="col-md-6 pb-1">
+                  <label htmlFor="">صور رخص العربية :</label>
+                  <input
+                    type="file"
+                    className="form-control my-2"
+                    multiple
+                    onChange={handleLicenseVehicleImgsEdit}
                   />
                 </div>
                 <div className="text-center pt-1">

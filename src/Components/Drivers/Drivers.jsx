@@ -261,8 +261,6 @@ const [eData, seteData] = useState(null);
     village: data?.village?._id || '',
     address: data?.address || '',
     urlLocation: data?.urlLocation || '',
-    // startTime: data?.startTime || '',
-    // endTime: data?.endTime || '',
     online:data?.online || '',
     categoryId: data?.categoryId?._id || '',
     dateOfBirth: data?.dateOfBirth || '',

@@ -633,7 +633,7 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
               <div className='bg-green p-2 m-1' key={index}>
                 <div className="d-flex">
                 <p className='mx-3'>السعر : <span className='fw-bold'>{item.price}</span></p>
-                <p className='mx-3'>الوقت : <span className='fw-bold'>{item.time}</span></p>
+                {item.time?<p className='mx-3'>الوقت : <span className='fw-bold'>{item.time}</span></p>:null}
                 <p className='mx-3'>الحالة : <span className='fw-bold'>{item.status}</span></p>
                 <button
   className="btn btn-danger"

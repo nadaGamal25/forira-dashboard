@@ -377,6 +377,18 @@ if (currentPage2 < numberOfPages2) {
            setStore('');
 
          };
+
+         async function endOrder(id) {
+          try {
+            const response = await axios.put(`https://delivery-app-pi-sable.vercel.app/api/order/recieve-order/${id}`);
+            console.log(response)
+            alert("تم انهاء الرحلة بنجاح");
+            getData();
+          } catch (error) {
+            console.error(error);
+            alert(error.response.data.message);
+          }
+        }       
 return (
 <>
  <div className='p-4 admin' id='content'>
@@ -418,6 +430,7 @@ return (
           <option value="waiting">waiting</option>
           <option value="current">current</option>
           <option value="ended">ended</option>
+          <option value="canceled">canceled</option>
         </select>
         </div>
        <div className="col-md-4">
@@ -463,6 +476,7 @@ return (
 <th scope="col">ملاحظات  </th>
 <th scope="col">التقييم  </th>
 <th scope="col">الحالة  </th>
+<th></th>           
 <th></th>           
 <th></th>           
 <th></th>           
@@ -545,12 +559,15 @@ return (
      <button className='btn btn-secondary' onClick={()=>{handleEditClickData(item)}}>تعديل</button>
      </td>
      <td>
-      <button className="btn btn-success" onClick={() => openModalOffer(item._id)}>العروض</button>
+      <button className="btn btn-warning" onClick={() => openModalOffer(item._id)}>العروض</button>
      </td>
      <td>
       {item.shopping.length !==0?
       <button className="btn btn-primary" onClick={() => openModalMain(item.shopping)}>التسوق</button>
       :<span>_</span>}
+     </td>
+     <td>
+      <button className="btn btn-success" onClick={() => endOrder(item._id)}>انهاء الرحلة</button>
      </td>
 </>
     )}

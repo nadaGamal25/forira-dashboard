@@ -67,6 +67,11 @@ label{
   background-color: #f9f9f9;
   border-radius: 15px;
   overflow-x: auto;
+  position: relative;
+}
+.clients-table thead{
+  /* position: fixed;
+  overflow-x: scroll; */
 }
 .gray-table{
   background-color: #f9f9f9;

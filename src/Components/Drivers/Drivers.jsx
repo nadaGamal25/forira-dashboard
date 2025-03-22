@@ -441,9 +441,10 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
  </div>
       </div>
     </div>
-
+    <div className="clients-table-container">
 <div className="clients-table p-4 my-4">
 <button className="btn btn-green m-1" onClick={getData}>عرض الجميع   </button>
+<div className="table-responsive">
 
 <table className="table">
 <thead>
@@ -563,6 +564,8 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
   </tbody>
 
 </table>
+</div>
+</div>
 </div>
 </div>
 <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>

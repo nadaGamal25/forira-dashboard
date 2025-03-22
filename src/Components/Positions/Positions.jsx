@@ -111,8 +111,9 @@ return <div key={index} className="alert alert-danger my-2">يجب ملىء جم
   </div>
 </div>
 
-
+<div className="clients-table-container">
 <div className="clients-table p-4 my-4">
+<div className="table-responsive">
 <table className="table">
 <thead>
 <tr>
@@ -169,6 +170,8 @@ onClick={() => {
 )}
 </tbody>
 </table>
+</div>
+</div>
 </div>
 </div>
 

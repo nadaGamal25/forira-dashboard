@@ -20,6 +20,7 @@ import Suggests from './Components/Suggests/Suggests';
 import UsersWallet from './Components/UsersWallet/UsersWallet';
 import Villages from './Components/Villages/Villages';
 import AddUser from './Components/AddUser/AddUser';
+import Notifications from './Components/Notifications/Notifications';
 
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
         {path:'media',element:<SocialMidea/>},
         {path:'about',element:<Aboutus/>},
         {path:'addUser',element:<AddUser/>},
+        {path:'notification',element:<Notifications/>},
        
       ]},
      

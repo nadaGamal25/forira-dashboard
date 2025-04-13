@@ -123,6 +123,13 @@ export default function Navbar({userData ,logout}) {
                 </Link>
             </li>
             <li>
+                <Link to="/notification">
+                <i class="fa-solid fa-bell bx"></i>
+                  <span class="text">الاشعارات
+                </span>
+                </Link>
+            </li>
+            <li>
                 <Link to="/about">
                 <i class="fa-solid fa-tablet-screen-button bx"></i>
                   <span class="text">عن التطبيق

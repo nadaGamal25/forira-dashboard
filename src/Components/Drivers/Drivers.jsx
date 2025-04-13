@@ -104,7 +104,7 @@ export default function Drivers() {
       }
 
       const [showModalMain, setShowModalMain] = useState(false);
-      const [selectedId, setSelectedId] = useState(false);
+      const [selectedId, setSelectedId] = useState(null);
       const openModalMain = (id) => {
         setShowModalMain(true);
         setSelectedId(id)
@@ -387,6 +387,46 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
     alert(error.response.data.message);
   }
 };
+
+// send notification
+const [showModalMsg, setShowModalMsg] = useState(false);
+      const openModalMsg = (id) => {
+        setShowModalMsg(true);
+        setSelectedId(id)
+      };
+    
+      const closeModalMsg = () => {
+        setShowModalMsg(false);
+        setTitle('')
+        setTheBODY('')
+        setSelectedId(null)
+      
+      };
+      const [theTitle, setTitle] = useState('');
+      const [theBody, setTheBODY] = useState('');
+      async function sendMsg(id) {
+        try {
+          const response = await axios.post(
+            `https://delivery-app-pi-sable.vercel.app/api/notifications/to-user/${id}`,
+            {
+              title: theTitle,
+              body: theBody,
+            },
+            {
+              headers: {
+                token: localStorage.getItem('userToken'),
+              },
+            }
+
+          );
+          console.log(response);
+          alert("تم الارسال بنجاح")
+            closeModalMsg();
+            
+        } catch (error) {
+          console.error(error);
+        }
+      }
   return (
     <>
  <div className='p-4 admin' id='content'>
@@ -480,6 +520,7 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
 <th></th>           
 <th></th>           
 <th></th>           
+<th></th>           
 
 </tr>
 </thead>
@@ -557,6 +598,9 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
   حذف
 </button>
      </td>
+     <td>
+      <button className="btn btn-success" onClick={()=>{openModalMsg(item._id)}}>ارسال اشعار</button>
+     </td>
      
         </tr>
       ) : null
@@ -625,6 +669,51 @@ editedData.licenseImg.forEach((file) => formData.append('licenseImg', file));
           {/* Additional buttons or actions can be added here */}
         </Modal.Footer>
       </Modal>
+      <Modal show={showModalMsg} onHide={closeModalMsg}>
+  <Modal.Header>
+    <Modal.Title></Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        sendMsg(selectedId);
+      }}
+    >
+      <div className='form-group'>
+        <label htmlFor='title'>title :</label>
+        <input
+          type='text'
+          className='form-control'
+          id='title'
+          value={theTitle}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <label htmlFor='body'>body :</label>
+        <input
+          type='text'
+          className='form-control'
+          id='body'
+          value={theBody}
+          onChange={(e) => setTheBODY(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <button type='submit' className='btn btn-success m-2'>
+          ارسال اشعار
+        </button>
+      </div>
+    </form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant='secondary' onClick={closeModalMsg}>
+      إغلاق
+    </Button>
+  </Modal.Footer>
+</Modal>
+
       <Modal show={showModalOffer} onHide={closeModalOffer}>
         <Modal.Header >
           <Modal.Title>

@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-import logo from '../../assets/logo.png'
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {Modal, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
-// import generateApiKey from 'generate-api-key';
-import pdfDocs from '../../../src/Gotex_Eg_Doc.pdf'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 export default function Navbar({userData ,logout}) {
     let navigate= useNavigate(); //hoke
@@ -94,13 +89,13 @@ export default function Navbar({userData ,logout}) {
                 </Link>
             </li>
             
-            <li>
+            {/* <li>
                 <Link to="/fav">
                 <i class="fa-solid fa-heart bx"></i>
                   <span class="text">السائقين المفضلين
                 </span>
                 </Link>
-            </li>
+            </li> */}
             <li>
                 <Link to="/addUser">
                 <i class="fa-solid fa-user bx"></i>

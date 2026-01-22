@@ -21,6 +21,7 @@ import UsersWallet from './Components/UsersWallet/UsersWallet';
 import Villages from './Components/Villages/Villages';
 import AddUser from './Components/AddUser/AddUser';
 import Notifications from './Components/Notifications/Notifications';
+import DriverDetails from './Components/Drivers/DriverDetails';
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
         {path:'reviewsApp',element:<ReviewsApp/>},
         {path:'contacts',element:<Contacts/>},
         {path:'drivers',element:<Drivers/>},
+        {path:'driverDetails/:id',element:<DriverDetails/>},
         {path:'clients',element:<Clients/>},
         {path:'wallet',element:<UsersWallet/>},
         {path:'orders',element:<Orders/>},

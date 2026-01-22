@@ -21,6 +21,11 @@ ul{
 a{
   text-decoration: none !important;
 }
+.btn-none{
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
 .my-input,
 .PhoneInputInput{
   background: transparent !important;
